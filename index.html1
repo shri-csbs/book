@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>BookWise - Book Recommendation System</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<script>
+tailwind.config = {
+    darkMode: 'class'
+}
+</script>
+
+<style>
+
+html{
+scroll-behavior:smooth;
+}
+
+.book-card{
+transition:all .4s ease;
+transform-style:preserve-3d;
+}
+
+.book-card:hover{
+transform:
+perspective(1000px)
+rotateX(8deg)
+rotateY(-8deg)
+translateY(-10px)
+scale(1.05);
+
+box-shadow:0 30px 50px rgba(0,0,0,.25);
+}
+
+.float{
+animation:float 4s ease-in-out infinite;
+}
+
+@keyframes float{
+0%,100%{
+transform:translateY(0px);
+}
+50%{
+transform:translateY(-15px);
+}
+}
+
+.glow{
+box-shadow:
+0 0 20px rgba(59,130,246,.4),
+0 0 40px rgba(59,130,246,.2);
+}
+
+</style>
+
+</head>
+
+<body class="bg-slate-100 dark:bg-slate-900 transition duration-500">
+
+<!-- NAVBAR -->
+
+<nav class="sticky top-0 z-50 bg-white/80 dark:bg-slate-800/80 backdrop-blur-lg shadow-md">
+
+<div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+
+<div class="flex items-center gap-3">
+
+<img src="bookwise-logo.png"
+class="w-14 h-14 rounded-full shadow-lg object-cover">
+
+<div>
+<h1 class="text-2xl font-bold text-indigo-900 dark:text-white">
+BookWise
+</h1>
+
+<p class="text-xs text-gray-500">
+Smart Book Recommendations
+</p>
+</div>
+
+</div>
+
+<div class="hidden md:flex gap-8 font-medium dark:text-white">
+<a href="#home">Home</a>
+<a href="#categories">Categories</a>
+<a href="#books">Books</a>
+<a href="#authors">Authors</a>
+<a href="#reviews">Reviews</a>
+</div>
+
+<button
+id="darkModeBtn"
+class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:scale-105 transition">
+🌙
+</button>
+
+</div>
+</nav>
+
+<!-- HERO -->
+
+<section
+id="home"
+class="bg-gradient-to-r from-indigo-900 via-blue-800 to-cyan-600 text-white py-20">
+
+<div class="max-w-7xl mx-auto px-6 text-center">
+
+<img src="bookwise-logo.png"
+class="w-40 mx-auto mb-8 float glow rounded-full">
+
+<h1 class="text-5xl md:text-7xl font-bold">
+BookWise
+</h1>
+
+<p class="mt-6 text-xl max-w-2xl mx-auto">
+Discover books tailored to your interests using AI-powered recommendations.
+</p>
+
+<button
+onclick="exploreBooks()"
+class="mt-8 bg-white text-indigo-700 px-8 py-4 rounded-full font-bold shadow-xl hover:scale-110 transition">
+Explore Books
+</button>
+
+</div>
+</section>
+
+<!-- FEATURED BOOK -->
+
+<section class="max-w-7xl mx-auto px-6 -mt-14">
+
+<div class="bg-white dark:bg-slate-800 rounded-3xl shadow-2xl p-8">
+
+<div class="grid md:grid-cols-2 gap-8 items-center">
+
+<div>
+
+<h2 class="text-4xl font-bold dark:text-white">
+Featured Book
+</h2>
+
+<p class="mt-4 text-gray-600 dark:text-gray-300">
+Atomic Habits by James Clear helps build better habits and break bad ones.
+</p>
+
+<button
+onclick="viewBook()"
+class="mt-6 bg-cyan-500 text-white px-6 py-3 rounded-xl">
+Read More
+</button>
+
+</div>
+
+<div class="flex justify-center">
+
+<div class="book-card bg-cyan-400 w-56 h-72 rounded-xl shadow-xl flex items-center justify-center text-7xl">
+📚
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- SEARCH -->
+
+<section class="max-w-7xl mx-auto px-6 mt-12">
+
+<div class="flex gap-3">
+
+<input
+id="searchInput"
+type="text"
+placeholder="Search books..."
+class="flex-1 p-4 rounded-xl border">
+
+<button
+onclick="searchBook()"
+class="bg-cyan-500 text-white px-8 rounded-xl">
+Search
+</button>
+
+</div>
+
+</section>
+
+<!-- CATEGORIES -->
+
+<section
+id="categories"
+class="max-w-7xl mx-auto px-6 mt-16">
+
+<h2 class="text-4xl font-bold mb-8 dark:text-white">
+Categories
+</h2>
+
+<div class="grid md:grid-cols-3 gap-6">
+
+<div class="book-card bg-gradient-to-r from-pink-500 to-red-500 rounded-2xl p-12 text-white text-center">
+📖
+<h3 class="text-2xl font-bold mt-4">Fiction</h3>
+</div>
+
+<div class="book-card bg-gradient-to-r from-indigo-500 to-purple-600 rounded-2xl p-12 text-white text-center">
+🚀
+<h3 class="text-2xl font-bold mt-4">Science Fiction</h3>
+</div>
+
+<div class="book-card bg-gradient-to-r from-green-500 to-emerald-600 rounded-2xl p-12 text-white text-center">
+🧠
+<h3 class="text-2xl font-bold mt-4">Self Development</h3>
+</div>
+
+</div>
+
+</section>
+
+<!-- RECOMMENDED BOOKS -->
+
+<section
+id="books"
+class="max-w-7xl mx-auto px-6 mt-16">
+
+<h2 class="text-4xl font-bold mb-8 dark:text-white">
+Recommended Books
+</h2>
+
+<div class="grid md:grid-cols-3 gap-6">
+
+<div class="book-card bg-white dark:bg-slate-800 rounded-2xl overflow-hidden shadow-lg">
+<div class="h-48 bg-cyan-500"></div>
+<div class="p-5">
+<h3 class="font-bold text-xl dark:text-white">Atomic Habits</h3>
+<p class="text-gray-500">James Clear</p>
+<button onclick="recommendBook('Atomic Habits')" class="mt-4 bg-cyan-500 text-white px-4 py-2 rounded">
+Recommend
+</button>
+</div>
+</div>
+
+<div class="book-card bg-white dark:bg-slate-800 rounded-2xl overflow-hidden shadow-lg">
+<div class="h-48 bg-purple-500"></div>
+<div class="p-5">
+<h3 class="font-bold text-xl dark:text-white">The Alchemist</h3>
+<p class="text-gray-500">Paulo Coelho</p>
+<button onclick="recommendBook('The Alchemist')" class="mt-4 bg-cyan-500 text-white px-4 py-2 rounded">
+Recommend
+</button>
+</div>
+</div>
+
+<div class="book-card bg-white dark:bg-slate-800 rounded-2xl overflow-hidden shadow-lg">
+<div class="h-48 bg-orange-500"></div>
+<div class="p-5">
+<h3 class="font-bold text-xl dark:text-white">Rich Dad Poor Dad</h3>
+<p class="text-gray-500">Robert Kiyosaki</p>
+<button onclick="recommendBook('Rich Dad Poor Dad')" class="mt-4 bg-cyan-500 text-white px-4 py-2 rounded">
+Recommend
+</button>
+</div>
+</div>
+
+</div>
+
+</section>
+
+<!-- AI SECTION -->
+
+<section class="max-w-7xl mx-auto px-6 mt-16">
+
+<div class="bg-gradient-to-r from-indigo-600 to-cyan-500 rounded-3xl p-10 text-white">
+
+<h2 class="text-4xl font-bold">
+AI Recommendation Engine
+</h2>
+
+<p class="mt-4">
+Get personalized book recommendations based on your interests.
+</p>
+
+<button
+onclick="getRecommendations()"
+class="mt-6 bg-white text-indigo-700 px-6 py-3 rounded-xl font-bold">
+Generate Recommendations
+</button>
+
+</div>
+
+</section>
+
+<!-- PROGRESS -->
+
+<section class="max-w-7xl mx-auto px-6 mt-16">
+
+<h2 class="text-4xl font-bold mb-6 dark:text-white">
+Reading Progress
+</h2>
+
+<div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-lg">
+
+<div class="flex justify-between mb-3 dark:text-white">
+<span>Atomic Habits</span>
+<span>75%</span>
+</div>
+
+<div class="w-full bg-gray-200 h-4 rounded-full">
+<div class="bg-cyan-500 h-4 rounded-full w-3/4"></div>
+</div>
+
+</div>
+
+</section>
+
+<!-- AUTHORS -->
+
+<section
+id="authors"
+class="max-w-7xl mx-auto px-6 mt-16">
+
+<h2 class="text-4xl font-bold mb-8 dark:text-white">
+Popular Authors
+</h2>
+
+<div class="grid md:grid-cols-4 gap-6">
+
+<div class="book-card bg-white dark:bg-slate-800 p-6 rounded-xl text-center">
+👨‍🏫
+<h3 class="font-bold mt-4 dark:text-white">James Clear</h3>
+</div>
+
+<div class="book-card bg-white dark:bg-slate-800 p-6 rounded-xl text-center">
+🧙
+<h3 class="font-bold mt-4 dark:text-white">J.K. Rowling</h3>
+</div>
+
+<div class="book-card bg-white dark:bg-slate-800 p-6 rounded-xl text-center">
+👨‍💼
+<h3 class="font-bold mt-4 dark:text-white">Paulo Coelho</h3>
+</div>
+
+<div class="book-card bg-white dark:bg-slate-800 p-6 rounded-xl text-center">
+✍️
+<h3 class="font-bold mt-4 dark:text-white">Stephen King</h3>
+</div>
+
+</div>
+
+</section>
+
+<!-- REVIEWS -->
+
+<section
+id="reviews"
+class="max-w-7xl mx-auto px-6 mt-16">
+
+<h2 class="text-4xl font-bold mb-8 dark:text-white">
+User Reviews
+</h2>
+
+<div class="grid md:grid-cols-2 gap-6">
+
+<div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-lg">
+<div class="text-yellow-400 text-2xl">⭐⭐⭐⭐⭐</div>
+<p class="mt-4 dark:text-white">
+Amazing recommendations and beautiful interface.
+</p>
+</div>
+
+<div class="bg-white dark:bg-slate-800 p-6 rounded-xl shadow-lg">
+<div class="text-yellow-400 text-2xl">⭐⭐⭐⭐⭐</div>
+<p class="mt-4 dark:text-white">
+Found several books that perfectly matched my interests.
+</p>
+</div>
+
+</div>
+
+</section>
+
+<!-- FOOTER -->
+
+<footer class="bg-indigo-950 text-white mt-20 py-12">
+
+<div class="text-center">
+
+<img src="bookwise-logo.png"
+class="w-20 mx-auto mb-4 rounded-full">
+
+<h2 class="text-3xl font-bold">
+BookWise
+</h2>
+
+<p class="mt-3">
+Find Books • Learn More • Grow Smarter
+</p>
+
+<p class="mt-5 text-gray-400">
+© 2026 BookWise. All Rights Reserved.
+</p>
+
+</div>
+
+</footer>
+
+<script>
+
+document.getElementById("darkModeBtn")
+.addEventListener("click",()=>{
+document.body.classList.toggle("dark");
+});
+
+function exploreBooks(){
+alert("Welcome to BookWise 📚");
+}
+
+function viewBook(){
+alert("Opening Featured Book");
+}
+
+function searchBook(){
+let value=document.getElementById("searchInput").value;
+
+if(value===""){
+alert("Please enter a book name");
+}else{
+alert("Searching for: " + value);
+}
+}
+
+function recommendBook(book){
+alert("Recommended: " + book);
+}
+
+function getRecommendations(){
+alert("AI is generating recommendations...");
+}
+
+</script>
+
+</body>
+</html>
